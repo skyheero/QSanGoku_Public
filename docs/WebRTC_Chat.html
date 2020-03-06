@@ -258,7 +258,7 @@
             txtCreateOffer.hidden = false;
             txtCreateOffer.select();
             document.execCommand("copy");
-            txtCreateOffer.hidden = true;
+            // txtCreateOffer.hidden = true;
         }
 
         function onSetAnswer() {
@@ -320,7 +320,7 @@
             txtCreateAnswer.hidden = false;
             txtCreateAnswer.select();
             document.execCommand("copy");
-            txtCreateAnswer.hidden = true;
+            // txtCreateAnswer.hidden = true;
         }
 
         function onFinish_createOffer(connect, sdp) {
@@ -443,7 +443,7 @@
     <br>
     <div id="divCreatePeer">
         <button onClick="onCreateOffer()">Create Offer</button><br>
-        <textarea id="txtCreateOffer" cols="40" rows="4" maxlength="1000" readonly="true" ></textarea>
+        <textarea id="txtCreateOffer" cols="40" rows="4" maxlength="1000" readonly="true" ></textarea><br>
         <button onClick="onOfferCopy()" hidden>copy</button>
         <textarea id="txtSetAnswer" cols="40" rows="4" maxlength="1000"
             placeholder="Paste Answer to Here"></textarea><br>
