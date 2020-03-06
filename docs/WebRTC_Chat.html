@@ -75,7 +75,7 @@
 
         }
         class Connect {
-            constructor(selfID, isCreateOffer, onMessage) {
+            constructor(selfID, isCreateOffer, onMessage, onConnectionStateChange) {
                 if (selfID != null && selfID.length != 0)
                     this.selfID = selfID;//string
                 this.opponentID = null;//string
@@ -87,6 +87,7 @@
                 this.onFinish_setOfferGenAnswer = null;
                 this.onSetAnswer = null;
                 this.onMessage = onMessage;
+                this.onConnectionStateChange = onConnectionStateChange;
                 this.dataChannelParams = { ordered: false };
                 this.candidate = [];
                 this.rtcConfig = {
@@ -129,9 +130,14 @@
             chOnError(event) {
                 Log.debug("DataChannel:chOnError" + event.data);
             }
+            peelOnConnectionStateChange(evt) {
+                Log.debug("peelOnConnectionStateChange" + event.data);
+                this.onConnectionStateChange(this.peer, this.ch);
+            }
             createOffer(onFinish_createOffer) {
                 this.onFinish_createOffer = onFinish_createOffer;
                 this.peer = new RTCPeerConnection(this.rtcConfig);
+                this.peer.onconnectionstatechange = (evt) => { this.peelOnConnectionStateChange(evt); };
                 // this.peer = new RTCPeerConnection();
                 this.ch = this.peer.createDataChannel("CreateOffer-" + this.constTimestamp, this.dataChannelParams);
                 this.ch.onopen = (evt) => { this.chOnOpen(evt); };
@@ -277,7 +283,7 @@
             if (hasConnecting) {
                 pc.createOffer(onFinish_createOffer);
             } else {
-                pc = new Connect(inUserID.value, true, onMessage);
+                pc = new Connect(inUserID.value, true, onMessage, onConnectionStateChange);
                 poolConnect.push(pc);
                 pc.createOffer(onFinish_createOffer);
             }
@@ -347,7 +353,7 @@
             if (hasConnecting) {
                 pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.userID, candidate);
             } else {
-                pc = new Connect(inUserID.value, false, onMessage);
+                pc = new Connect(inUserID.value, false, onMessage, onConnectionStateChange);
                 poolConnect.push(pc);
                 pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.userID, candidate);
             }
@@ -421,6 +427,22 @@
             }
         }
 
+        function onConnectionStateChange(peer, ch) {
+            Log.debug("onConnectionStateChange " + ch.label + ":" + peer.connectionState);
+            poolConnect.forEach(c => {
+                if (c.peer.connectionState === "disconnected"
+                    || c.peer.connectionState === "failed"
+                    || c.peer.connectionState === "closed") {
+                    Log.warn(c.ch.label + ":" + c.peer.connectionState);
+                }
+            });
+            poolConnect = poolConnect.filter(c =>
+                c.peer.connectionState !== "disconnected"
+                && c.peer.connectionState !== "failed"
+                && c.peer.connectionState !== "closed"
+            );
+        }
+
         function onSendMsg() {
             const msg = inMsg.value;
             const dcMsg = new DataChannelMsg(inUserID.value, null, msg, DataChannelMsgType.Broadcast);
@@ -428,17 +450,17 @@
         }
 
         function developMsg(dcMsg) {
-            if (dcMsg.type === DataChannelMsgType.Opponent) {
-                for (let i = 0; i < poolConnect.length; i++) {
-                    const connect = poolConnect[i];
-                    const channel = connect.ch;
-                    if (channel.readyState === "open" && dcMsg.channel === channel) {
-                        channel.send(JSON.stringify(dcMsg));
-                        break;
-                    }
-                }
-                return;
-            }
+            // if (dcMsg.type === DataChannelMsgType.Opponent) {
+            //     for (let i = 0; i < poolConnect.length; i++) {
+            //         const connect = poolConnect[i];
+            //         const channel = connect.ch;
+            //         if (channel.readyState === "open" && dcMsg.channel === channel) {
+            //             channel.send(JSON.stringify(dcMsg));
+            //             break;
+            //         }
+            //     }
+            //     return;
+            // }
             for (let i = 0; i < poolConnect.length; i++) {
                 const connect = poolConnect[i];
                 const channel = connect.ch;
