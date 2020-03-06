@@ -44,7 +44,8 @@
             }
         };
         const DataChannelMsgType = {
-            Broadcast: "Broadcast"
+            Broadcast: "Broadcast",
+            Opponent: "Opponent",
         }
         class DataChannelMsg {
             constructor(from, to, body, type) {
@@ -122,6 +123,12 @@
                 Log.debug("DataChannel:onMessage" + event.data);
                 this.onMessage(this.ch, event);
             }
+            chOnClose(event) {
+                Log.debug("DataChannel:chOnClose" + event.data);
+            }
+            chOnError(event) {
+                Log.debug("DataChannel:chOnError" + event.data);
+            }
             createOffer(onFinish_createOffer) {
                 this.onFinish_createOffer = onFinish_createOffer;
                 this.peer = new RTCPeerConnection(this.rtcConfig);
@@ -130,6 +137,8 @@
                 this.ch.onopen = (evt) => { this.chOnOpen(evt); };
                 // this.ch.addEventListener('open', () => {this.chOnOpen(evt);});
                 this.ch.onmessage = (evt) => { this.chOnMessage(evt); };
+                this.ch.onclose = (evt) => { this.chOnClose(evt); };
+                this.ch.onerror = (evt) => { this.chOnError(evt); };
                 // this.ch.addEventListener('message', () => {this.chOnMessage(evt);});
                 this.peer.ondatachannel = (evt) => {
                     Log.debug("onDataChannel:" + this.ch.label);
@@ -163,6 +172,8 @@
                     Log.debug("Answer onDataChannel:" + this.ch.label);
                     this.ch.onopen = (evt) => { this.chOnOpen(evt); }
                     this.ch.onmessage = (evt) => { this.chOnMessage(evt); }
+                    this.ch.onclose = (evt) => { this.chOnClose(evt); };
+                    this.ch.onerror = (evt) => { this.chOnError(evt); };
                 }
                 // this.peer.addEventListener('datachannel', (evt) => {this.peer.ondatachannel(evt)});
                 this.peer.onicecandidate = (evt) => {
@@ -417,6 +428,17 @@
         }
 
         function developMsg(dcMsg) {
+            if (dcMsg.type === DataChannelMsgType.Opponent) {
+                for (let i = 0; i < poolConnect.length; i++) {
+                    const connect = poolConnect[i];
+                    const channel = connect.ch;
+                    if (channel.readyState === "open" && dcMsg.channel === channel) {
+                        channel.send(JSON.stringify(dcMsg));
+                        break;
+                    }
+                }
+                return;
+            }
             for (let i = 0; i < poolConnect.length; i++) {
                 const connect = poolConnect[i];
                 const channel = connect.ch;
