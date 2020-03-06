@@ -43,6 +43,9 @@
                 console.error(Log.genMsg(msg));
             }
         };
+        const DataChannelMsgType = {
+            Broadcast: "Broadcast"
+        }
         class DataChannelMsg {
             constructor(from, to, body, type) {
                 this.from = from;
@@ -68,28 +71,9 @@
                 dcMsg.guid = jDCMsg.guid;
                 return dcMsg;
             }
-            static Type = {
-                Broadcast: "Broadcast"
-            }
+
         }
         class Connect {
-            static rtcConfig = {
-                iceServers: [
-                    // {
-                    //     urls: "stun:stun.services.mozilla.com",
-                    //     username: "louis@mozilla.com",
-                    //     credential: "webrtcdemo"
-                    // },
-                    {
-                        urls: [
-                            // "stun:stun.l.google.com:19302",
-                            // "stun:stun1.l.google.com:19302",
-                            // "stun:stun2.l.google.com:19302",
-                            // "stun:stun3.l.google.com:19302",
-                            "stun:stun4.l.google.com:19302",
-                        ]
-                    }]
-            };
             constructor(selfID, isCreateOffer, onMessage) {
                 if (selfID != null && selfID.length != 0)
                     this.selfID = selfID;//string
@@ -103,7 +87,27 @@
                 this.onSetAnswer = null;
                 this.onMessage = onMessage;
                 this.dataChannelParams = { ordered: false };
-                this.candidate = null;
+                this.candidate = [];
+                this.rtcConfig = {
+                    iceServers: [
+                        // {
+                        //     urls: "stun:stun.services.mozilla.com",
+                        //     username: "louis@mozilla.com",
+                        //     credential: "webrtcdemo"
+                        // },
+                        {
+                            urls: [
+                                // "stun:stun.l.google.com:19302",
+                                "stun:stun.l.google.com:19302",
+                                "stun:stun1.l.google.com:19302",
+                                "stun:stun2.l.google.com:19302",
+                                "stun:stun3.l.google.com:19302",
+                                "stun:stun4.l.google.com:19302",
+                                // "stun:stun.webrtc.ecl.ntt.com:3478",
+                            ]
+                        }
+                    ]
+                };
             }
             setOnMessage(onMessage) {
                 this.onMessage = onMessage;
@@ -111,7 +115,7 @@
             chOnOpen(event) {
                 Log.debug("DataChannel:onOpen" + this.ch);
                 var msg = "Hi " + this.selfID + " onOpen";
-                var dcMsg = new DataChannelMsg(this.selfID, null, msg, DataChannelMsg.Type.Broadcast);
+                var dcMsg = new DataChannelMsg(this.selfID, null, msg, DataChannelMsgType.Broadcast);
                 this.ch.send(JSON.stringify(dcMsg));
             }
             chOnMessage(event) {
@@ -120,7 +124,8 @@
             }
             createOffer(onFinish_createOffer) {
                 this.onFinish_createOffer = onFinish_createOffer;
-                this.peer = new RTCPeerConnection(Connect.rtcConfig);
+                this.peer = new RTCPeerConnection(this.rtcConfig);
+                // this.peer = new RTCPeerConnection();
                 this.ch = this.peer.createDataChannel("CreateOffer-" + this.constTimestamp, this.dataChannelParams);
                 this.ch.onopen = (evt) => { this.chOnOpen(evt); };
                 // this.ch.addEventListener('open', () => {this.chOnOpen(evt);});
@@ -129,13 +134,15 @@
                 this.peer.ondatachannel = (evt) => {
                     Log.debug("onDataChannel:" + this.ch.label);
                 };
+                // this.peer.addEventListener('datachannel', (evt) => {this.peer.ondatachannel(evt)});
                 this.peer.onicecandidate = (evt) => {
-                    Log.debug("onIceCandidate" + this.constTimestamp);
+                    Log.debug("Offer onIceCandidate" + this.constTimestamp);
                     if (evt.candidate) { // ICE candidate が収集された場合
-                        Log.debug("ICE candidateが収集された場合 " + evt.candidate);
-                        this.candidate = evt.candidate;
+                        Log.debug("Offer Get ICE candidate:" + evt.candidate.candidate);
+                        this.candidate.push(evt.candidate);
+                        // this.candidate = evt.candidate;
                     } else { // ICE candidateの収集が完了した場合
-                        Log.debug("ICE candidateの収集が完了した場合");
+                        Log.debug("Offer end ICE candidate");
                         //this.peer.localDescription 
                         //JSON.stringify(this.peer.localDescription.toJSON())
                         this.onFinish_createOffer(this, this.peer.localDescription);
@@ -149,10 +156,11 @@
             }
             setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, opponentID, candidate) {
                 this.onFinish_setOfferGenAnswer = onFinish_setOfferGenAnswer;
-                this.peer = new RTCPeerConnection(Connect.rtcConfig);
+                this.peer = new RTCPeerConnection(this.rtcConfig);
+                // this.peer = new RTCPeerConnection();
                 this.peer.ondatachannel = (evt) => {
                     this.ch = event.channel;
-                    Log.debug("onDataChannel:" + this.ch.label);
+                    Log.debug("Answer onDataChannel:" + this.ch.label);
                     this.ch.onopen = (evt) => { this.chOnOpen(evt); }
                     this.ch.onmessage = (evt) => { this.chOnMessage(evt); }
                 }
@@ -160,10 +168,11 @@
                 this.peer.onicecandidate = (evt) => {
                     Log.debug("onIceCandidate" + this.constTimestamp);
                     if (evt.candidate) { // ICE candidate が収集された場合
-                        Log.debug("ICE candidateが収集された場合 " + evt.candidate);
-                        this.candidate = evt.candidate;
+                        Log.debug("Answer Get ICE candidate:" + evt.candidate.candidate);
+                        this.candidate.push(evt.candidate);
+                        // this.candidate = evt.candidate;
                     } else { // ICE candidateの収集が完了した場合
-                        Log.debug("ICE candidateの収集が完了した場合");
+                        Log.debug("Answer end ICE candidate");
                         //this.peer.localDescription 
                         this.onFinish_setOfferGenAnswer(this, this.peer.localDescription.toJSON());
                     }
@@ -176,11 +185,14 @@
                 }).catch((reason) => {
                     Log.error(reason);
                 });
-                this.peer.addIceCandidate(candidate).then(() => {
-                    Log.debug("setOfferGenAnswer addIceCandidate");
-                }).catch((reason) => {
-                    Log.error(reason);
+                candidate.forEach(candy => {
+                    this.peer.addIceCandidate(candy).then(() => {
+                        Log.debug("setOfferGenAnswer addIceCandidate");
+                    }).catch((reason) => {
+                        Log.error(reason);
+                    });
                 });
+
             }
             setAnswer(sdp, onSetAnswer, opponentID, candidate) {
                 this.opponentID = opponentID;
@@ -191,10 +203,12 @@
                 }).catch((reason) => {
                     Log.error(reason);
                 });
-                this.peer.addIceCandidate(candidate).then(() => {
-                    Log.debug("setAnswer addIceCandidate");
-                }).catch((reason) => {
-                    Log.error(reason);
+                candidate.forEach(candy => {
+                    this.peer.addIceCandidate(candy).then(() => {
+                        Log.debug("setAnswer addIceCandidate");
+                    }).catch((reason) => {
+                        Log.error(reason);
+                    });
                 });
             }
         }
@@ -282,7 +296,11 @@
 
                 var jSdp = JSON.parse(txtSetAnswer.value);
                 var sdp = new RTCSessionDescription(jSdp);
-                var candidate = new RTCIceCandidate(jSdp.candidate);
+                var candidate = [];
+                for (let i = 0; i < jSdp.candidate.length; i++) {
+                    const candy = jSdp.candidate[i];
+                    candidate.push(new RTCIceCandidate(candy));
+                }
                 pc.setAnswer(sdp, null, jSdp.userID, candidate);
             }
 
@@ -310,7 +328,11 @@
             }
             var jSdp = JSON.parse(txtSetOffer.value);
             var sdp = new RTCSessionDescription(jSdp);
-            var candidate = new RTCIceCandidate(jSdp.candidate);
+            var candidate = [];
+            for (let i = 0; i < jSdp.candidate.length; i++) {
+                const candy = jSdp.candidate[i];
+                candidate.push(new RTCIceCandidate(candy));
+            }
             if (hasConnecting) {
                 pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.userID, candidate);
             } else {
@@ -390,7 +412,7 @@
 
         function onSendMsg() {
             const msg = inMsg.value;
-            const dcMsg = new DataChannelMsg(inUserID.value, null, msg, DataChannelMsg.Type.Broadcast);
+            const dcMsg = new DataChannelMsg(inUserID.value, null, msg, DataChannelMsgType.Broadcast);
             developMsg(dcMsg);
         }
 
