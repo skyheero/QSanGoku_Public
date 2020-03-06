@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<header>
+    <script>
+        function generateUuid() {
+            // https://github.com/GoogleChrome/chrome-platform-analytics/blob/master/src/internal/identifier.js
+            // const FORMAT: string = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
+            let chars = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".split("");
+            for (let i = 0, len = chars.length; i < len; i++) {
+                switch (chars[i]) {
+                    case "x":
+                        chars[i] = Math.floor(Math.random() * 16).toString(16);
+                        break;
+                    case "y":
+                        chars[i] = (Math.floor(Math.random() * 4) + 8).toString(16);
+                        break;
+                }
+            }
+            return chars.join("");
+        }
+        class Log {
+            static genMsg(msg) {
+                // console.trace(msg);
+                if (Error.isPrototypeOf(msg.constructor)) {
+                    msg += "\n" + msg.stack;
+                }
+                return Date.now() + ":" + msg;
+            }
+            static debug(msg) {
+                // console.trace(msg);
+                console.debug(Log.genMsg(msg));
+            }
+            static log(msg) {
+                console.log(Log.genMsg(msg));
+            }
+            static warn(msg) {
+                console.warn(Log.genMsg(msg));
+            }
+            static error(msg) {
+                console.error(Log.genMsg(msg));
+            }
+        };
+        class DataChannelMsg {
+            constructor(from, to, body, type) {
+                this.from = from;
+                this.to = to;
+                if (body)
+                    this.body = body.substring(0, 20);
+                this.genTime = Date.now();
+                this.type = type;
+                this.guid = null;
+                this.developed = false;
+                this.channel = null;//lable
+                if (from) {
+                    this.guid = generateUuid();
+                }
+            }
+            static parseJSON(jDCMsg) {
+                var dcMsg = new DataChannelMsg();
+                dcMsg.from = jDCMsg.from;
+                dcMsg.to = jDCMsg.to;
+                dcMsg.body = jDCMsg.body.substring(0, 20);
+                dcMsg.genTime = jDCMsg.genTime;
+                dcMsg.type = jDCMsg.type;
+                dcMsg.guid = jDCMsg.guid;
+                return dcMsg;
+            }
+            static Type = {
+                Broadcast: "Broadcast"
+            }
+        }
+        class Connect {
+            static rtcConfig = {
+                iceServers: [
+                    // {
+                    //     urls: "stun:stun.services.mozilla.com",
+                    //     username: "louis@mozilla.com",
+                    //     credential: "webrtcdemo"
+                    // },
+                    {
+                        urls: [
+                            // "stun:stun.l.google.com:19302",
+                            // "stun:stun1.l.google.com:19302",
+                            // "stun:stun2.l.google.com:19302",
+                            // "stun:stun3.l.google.com:19302",
+                            "stun:stun4.l.google.com:19302",
+                        ]
+                    }]
+            };
+            constructor(selfID, isCreateOffer, onMessage) {
+                if (selfID != null && selfID.length != 0)
+                    this.selfID = selfID;//string
+                this.opponentID = null;//string
+                this.isCreateOffer = isCreateOffer;//bool
+                this.constTimestamp = Date.now();
+                this.peer = null;
+                this.ch = null;
+                this.onFinish_createOffer = null;
+                this.onFinish_setOfferGenAnswer = null;
+                this.onSetAnswer = null;
+                this.onMessage = onMessage;
+                this.dataChannelParams = { ordered: false };
+                this.candidate = null;
+            }
+            setOnMessage(onMessage) {
+                this.onMessage = onMessage;
+            }
+            chOnOpen(event) {
+                Log.debug("DataChannel:onOpen" + this.ch);
+                var msg = "Hi " + this.selfID + " onOpen";
+                var dcMsg = new DataChannelMsg(this.selfID, null, msg, DataChannelMsg.Type.Broadcast);
+                this.ch.send(JSON.stringify(dcMsg));
+            }
+            chOnMessage(event) {
+                Log.debug("DataChannel:onMessage" + event.data);
+                this.onMessage(this.ch, event);
+            }
+            createOffer(onFinish_createOffer) {
+                this.onFinish_createOffer = onFinish_createOffer;
+                this.peer = new RTCPeerConnection(Connect.rtcConfig);
+                this.ch = this.peer.createDataChannel("CreateOffer-" + this.constTimestamp, this.dataChannelParams);
+                this.ch.onopen = (evt) => { this.chOnOpen(evt); };
+                // this.ch.addEventListener('open', () => {this.chOnOpen(evt);});
+                this.ch.onmessage = (evt) => { this.chOnMessage(evt); };
+                // this.ch.addEventListener('message', () => {this.chOnMessage(evt);});
+                this.peer.ondatachannel = (evt) => {
+                    Log.debug("onDataChannel:" + this.ch.label);
+                };
+                this.peer.onicecandidate = (evt) => {
+                    Log.debug("onIceCandidate" + this.constTimestamp);
+                    if (evt.candidate) { // ICE candidate が収集された場合
+                        Log.debug("ICE candidateが収集された場合 " + evt.candidate);
+                        this.candidate = evt.candidate;
+                    } else { // ICE candidateの収集が完了した場合
+                        Log.debug("ICE candidateの収集が完了した場合");
+                        //this.peer.localDescription 
+                        //JSON.stringify(this.peer.localDescription.toJSON())
+                        this.onFinish_createOffer(this, this.peer.localDescription);
+                    }
+                }
+                this.peer.createOffer().then((description) => {
+                    return this.peer.setLocalDescription(description);
+                }).catch((reason) => {
+                    Log.error(reason);
+                });
+            }
+            setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, opponentID, candidate) {
+                this.onFinish_setOfferGenAnswer = onFinish_setOfferGenAnswer;
+                this.peer = new RTCPeerConnection(Connect.rtcConfig);
+                this.peer.ondatachannel = (evt) => {
+                    this.ch = event.channel;
+                    Log.debug("onDataChannel:" + this.ch.label);
+                    this.ch.onopen = (evt) => { this.chOnOpen(evt); }
+                    this.ch.onmessage = (evt) => { this.chOnMessage(evt); }
+                }
+                // this.peer.addEventListener('datachannel', (evt) => {this.peer.ondatachannel(evt)});
+                this.peer.onicecandidate = (evt) => {
+                    Log.debug("onIceCandidate" + this.constTimestamp);
+                    if (evt.candidate) { // ICE candidate が収集された場合
+                        Log.debug("ICE candidateが収集された場合 " + evt.candidate);
+                        this.candidate = evt.candidate;
+                    } else { // ICE candidateの収集が完了した場合
+                        Log.debug("ICE candidateの収集が完了した場合");
+                        //this.peer.localDescription 
+                        this.onFinish_setOfferGenAnswer(this, this.peer.localDescription.toJSON());
+                    }
+                }
+                this.opponentID = opponentID;
+                this.peer.setRemoteDescription(sdp).then(() => {
+                    return this.peer.createAnswer();
+                }).then((description) => {
+                    this.peer.setLocalDescription(description);
+                }).catch((reason) => {
+                    Log.error(reason);
+                });
+                this.peer.addIceCandidate(candidate).then(() => {
+                    Log.debug("setOfferGenAnswer addIceCandidate");
+                }).catch((reason) => {
+                    Log.error(reason);
+                });
+            }
+            setAnswer(sdp, onSetAnswer, opponentID, candidate) {
+                this.opponentID = opponentID;
+                this.onSetAnswer = onSetAnswer;
+
+                this.peer.setRemoteDescription(sdp).then(() => {
+                    Log.debug("setAnswer setRemoteDescription");
+                }).catch((reason) => {
+                    Log.error(reason);
+                });
+                this.peer.addIceCandidate(candidate).then(() => {
+                    Log.debug("setAnswer addIceCandidate");
+                }).catch((reason) => {
+                    Log.error(reason);
+                });
+            }
+        }
+
+
+    </script>
+    <script>
+        var ckPoolConnect = function () {
+            Log.debug("ckPoolConnect");
+            setTimeout(ckPoolConnect, 1000);
+        }
+        var ckPoolReceiveMsg = function () {
+            Log.debug("ckPoolReceiveMsg");
+            setTimeout(ckPoolConnect, 1000);
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            Log.debug('DOM fully loaded and parsed');
+            const inUserID = document.getElementById("inUserID");
+            const inMsg = document.getElementById("inMsg");
+
+            const btnCreatePeer = document.getElementById("btnCreatePeer");
+            const btnJoinPeer = document.getElementById("btnJoinPeer");
+            const btnPeerCancel = document.getElementById("btnPeerCancel");
+
+            const txtCreateAnswer = document.getElementById("txtCreateAnswer");
+            const txtCreateOffer = document.getElementById("txtCreateOffer");
+            const txtSetOffer = document.getElementById("txtSetOffer");
+            const txtSetAnswer = document.getElementById("txtSetAnswer");
+
+            const divCreatePeer = document.getElementById("divCreatePeer");
+            const divJoinPeer = document.getElementById("divJoinPeer");
+            const divChat = document.getElementById("divChat");
+        });
+
+
+        var poolConnect = [];
+        var poolReceiveMsg = [];
+
+        function onCreateOffer() {
+            var index = 0;
+            var hasConnecting = false;
+            var pc = null;
+            for (; index < poolConnect.length; index++) {
+                const element = poolConnect[index];
+                var ch = element.ch;
+                if (ch.readyState === "connecting" && element.isCreateOffer == true) {
+                    hasConnecting = true;
+                    pc = element;
+                    break;
+                }
+            }
+            if (hasConnecting) {
+                pc.createOffer(onFinish_createOffer);
+            } else {
+                pc = new Connect(inUserID.value, true, onMessage);
+                poolConnect.push(pc);
+                pc.createOffer(onFinish_createOffer);
+            }
+        }
+
+        function onOfferCopy() {
+            txtCreateOffer.hidden = false;
+            txtCreateOffer.select();
+            document.execCommand("copy");
+            txtCreateOffer.hidden = true;
+        }
+
+        function onSetAnswer() {
+            var index = 0;
+            var hasConnecting = false;
+            var pc = null;
+            for (; index < poolConnect.length; index++) {
+                const element = poolConnect[index];
+                var ch = element.ch;
+                if (ch.readyState === "connecting" && element.isCreateOffer == true) {
+                    hasConnecting = true;
+                    pc = element;
+                    break;
+                }
+            }
+            if (hasConnecting) {
+
+                var jSdp = JSON.parse(txtSetAnswer.value);
+                var sdp = new RTCSessionDescription(jSdp);
+                var candidate = new RTCIceCandidate(jSdp.candidate);
+                pc.setAnswer(sdp, null, jSdp.userID, candidate);
+            }
+
+            txtSetAnswer.value = "";
+            txtSetOffer.value = "";
+        }
+
+        function onOfferPaste() {
+            txtSetOffer.focus();
+            document.execCommand("paste");//not work
+        }
+
+        function onSetOfferGenAnswer() {
+            var index = 0;
+            var hasConnecting = false;
+            var pc = null;
+            for (; index < poolConnect.length; index++) {
+                const element = poolConnect[index];
+                var ch = element.ch;
+                if (ch.readyState === "connecting" && element.isCreateOffer == false) {
+                    hasConnecting = true;
+                    pc = element;
+                    break;
+                }
+            }
+            var jSdp = JSON.parse(txtSetOffer.value);
+            var sdp = new RTCSessionDescription(jSdp);
+            var candidate = new RTCIceCandidate(jSdp.candidate);
+            if (hasConnecting) {
+                pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.userID, candidate);
+            } else {
+                pc = new Connect(inUserID.value, false, onMessage);
+                poolConnect.push(pc);
+                pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.userID, candidate);
+            }
+        }
+
+        function onAnswertCopy() {
+            txtCreateAnswer.hidden = false;
+            txtCreateAnswer.select();
+            document.execCommand("copy");
+            txtCreateAnswer.hidden = true;
+        }
+
+        function onFinish_createOffer(connect, sdp) {
+            // JSON.stringify(this.peer.localDescription.toJSON())
+            var jSdp = connect.peer.localDescription.toJSON();
+            jSdp.userID = connect.selfID;
+            jSdp.candidate = connect.candidate;
+            txtCreateOffer.value = JSON.stringify(jSdp);
+            onOfferCopy();
+            txtSetOffer.select();
+        }
+
+        function onFinish_setOfferGenAnswer(connect, sdp) {
+            var jSdp = connect.peer.localDescription.toJSON();
+            jSdp.userID = connect.selfID;
+            jSdp.candidate = connect.candidate;
+            txtCreateAnswer.value = JSON.stringify(jSdp);
+            onAnswertCopy();
+            txtSetAnswer.select();
+        }
+
+        function onMessage(channel, evt) {
+            // Log.log(evt.data);
+            try {
+                jDCMsg = JSON.parse(evt.data);
+                var dcMsg = DataChannelMsg.parseJSON(jDCMsg);
+                dcMsg.channel = channel;
+                const mid = dcMsg.guid.substring(9, 13);
+                if (!dcMsg.guid) {
+                    Log.warn("No GUID MSG");
+                    return;
+                }
+                var sameMsg = null;
+                for (let i = 0; i < poolReceiveMsg.length; i++) {
+                    const rDCMsg = poolReceiveMsg[i];
+                    if (rDCMsg.guid === dcMsg.guid) {
+                        sameMsg = rDCMsg;
+                        break;
+                    }
+                }
+                if (!sameMsg) {
+                    poolReceiveMsg.push(dcMsg);
+                    var p = document.createElement("p")
+                    p.innerText = "(" + mid + ")" + dcMsg.from + "->" + dcMsg.to + ":" + dcMsg.body;
+                    divChat.append(p);
+                } else {
+                    Log.debug("(" + mid + ")" + "hasSameMsg");
+                }
+                const now = Date.now();
+                const diffTime = now - dcMsg.genTime;
+                const limitTime = 10 * 1000;
+                if (diffTime < limitTime && (!sameMsg || !sameMsg.developed)) {
+                    dcMsg.developed = true;
+                    developMsg(dcMsg)//他方轉傳
+                } else {
+                    Log.debug("(" + mid + ")" + "developed");
+                }
+
+            } catch (err) {
+                Log.error(err)
+            }
+        }
+
+        function onSendMsg() {
+            const msg = inMsg.value;
+            const dcMsg = new DataChannelMsg(inUserID.value, null, msg, DataChannelMsg.Type.Broadcast);
+            developMsg(dcMsg);
+        }
+
+        function developMsg(dcMsg) {
+            for (let i = 0; i < poolConnect.length; i++) {
+                const connect = poolConnect[i];
+                const channel = connect.ch;
+                if (channel.readyState === "open" && dcMsg.channel != channel) {
+                    channel.send(JSON.stringify(dcMsg));
+                } else {
+                    Log.debug("Same Channel");
+                }
+
+            }
+        }
+
+        function onCreatePeer(evt) {
+            divCreatePeer.hidden = false;
+            divJoinPeer.hidden = true;
+            btnCreatePeer.hidden = true;
+            btnJoinPeer.hidden = true;
+            btnPeerCancel.hidden = false;
+
+        }
+
+        function onJoinPeer(evt) {
+            divCreatePeer.hidden = true;
+            divJoinPeer.hidden = false;
+            btnCreatePeer.hidden = true;
+            btnJoinPeer.hidden = true;
+            btnPeerCancel.hidden = false;
+        }
+
+        function onPeerCancel(evt) {
+            divCreatePeer.hidden = true;
+            divJoinPeer.hidden = true;
+            btnCreatePeer.hidden = false;
+            btnJoinPeer.hidden = false;
+            btnPeerCancel.hidden = true;
+        }
+
+
+
+
+    </script>
+</header>
+
+<body>
+    <label>ID</label>
+    <input id="inUserID" type="text"><br>
+    <!-- <button id="btnCreatePeer" onClick="onCreatePeer()">Create Peer</button>
+    <button id="btnJoinPeer" onClick="onJoinPeer()">Join Peer</button>
+    <button id="btnPeerCancel" onClick="onPeerCancel()" hidden>Peer Cancel</button> -->
+    <br>
+    <div id="divCreatePeer">
+        <button onClick="onCreateOffer()">Create Offer</button><br>
+        <textarea id="txtCreateOffer" cols="40" rows="4" maxlength="1000" readonly="true" hidden></textarea>
+        <button onClick="onOfferCopy()" hidden>copy</button>
+        <textarea id="txtSetAnswer" cols="40" rows="4" maxlength="1000"
+            placeholder="Paste Answer to Here"></textarea><br>
+        <button onClick="onSetAnswer()">Set Answer</button><br>
+    </div>
+
+    <div id="divJoinPeer">
+        <!-- <button onClick="onOfferPaste()">paste</button><br>not work -->
+        <textarea id="txtSetOffer" cols="40" rows="4" maxlength="1000" placeholder="Paste Offer to Here"></textarea><br>
+        <button onClick="onSetOfferGenAnswer()">Set Offer -> Gen Answer</button><br>
+        <textarea id="txtCreateAnswer" cols="40" rows="4" maxlength="1000" readonly="true" hidden></textarea>
+        <button onClick="onAnswertCopy()" hidden>copy</button><br>
+    </div>
+
+    <input id="inMsg" type="text"><br>
+    <button onClick="onSendMsg()">Send</button>
+    <div id="divChat"></div><br>
+    <div id="divLog"></div><br>
+    <div id="divLinke"></div><br>
+</body>
+
+</html>
