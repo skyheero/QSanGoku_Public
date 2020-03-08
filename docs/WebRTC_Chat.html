@@ -24,9 +24,11 @@
                 if (Error.isPrototypeOf(msg.constructor)) {
                     msg += "\n" + msg.stack;
                 }
-                var p = document.createElement("p");
-                p.innerText = Date.now() + ":" + msg;
-                divLog.append(p);
+                var swap = document.createElement("swap");
+                swap.innerText = Date.now() + ":" + msg;
+                divLog.append(swap);
+                var br = document.createElement("br");
+                divLog.append(br);
                 return Date.now() + ":" + msg;
             }
             static debug(msg) {
@@ -44,45 +46,54 @@
             }
         };
         const DataChannelMsgType = {
+            JoinNetwork: "JoinNetwork",
             Broadcast: "Broadcast",
-            Opponent: "Opponent",
+            LinkUpdate: "LinkUpdate",
+            Handshake: "Handshake",
         }
         class DataChannelMsg {
-            constructor(from, to, body, type) {
+            constructor(from, to, body, type, nodeID) {
                 this.from = from;
                 this.to = to;
-                if (body)
-                    this.body = body.substring(0, 20);
+                // if (body)
+                //     this.body = body.substring(0, 20);
+                this.body = body;
                 this.genTime = Date.now();
                 this.type = type;
-                this.guid = null;
+                this.msgID = null;
                 this.developed = false;
-                this.channel = null;//lable
                 if (from) {
-                    this.guid = generateUuid();
+                    this.msgID = generateUuid();
                 }
+                this.nodeID = nodeID;
             }
             static parseJSON(jDCMsg) {
                 var dcMsg = new DataChannelMsg();
                 dcMsg.from = jDCMsg.from;
                 dcMsg.to = jDCMsg.to;
-                dcMsg.body = jDCMsg.body.substring(0, 20);
+                // dcMsg.body = jDCMsg.body.substring(0, 20);
+                dcMsg.body = jDCMsg.body;
                 dcMsg.genTime = jDCMsg.genTime;
                 dcMsg.type = jDCMsg.type;
-                dcMsg.guid = jDCMsg.guid;
+                dcMsg.msgID = jDCMsg.msgID;
+                dcMsg.nodeID = jDCMsg.nodeID
                 return dcMsg;
             }
 
         }
         class Connect {
-            constructor(selfID, isCreateOffer, onMessage, onConnectionStateChange) {
-                if (selfID != null && selfID.length != 0)
-                    this.selfID = selfID;//string
-                this.opponentID = null;//string
+            constructor(offerID, isCreateOffer, onMessage, onConnectionStateChange, nodeID, answerID) {
+                if (offerID != null && offerID.length != 0)
+                    this.offerID = offerID;//string
+                if (answerID != null && answerID.length != 0)
+                    this.answerID = answerID;//string
                 this.isCreateOffer = isCreateOffer;//bool
                 this.constTimestamp = Date.now();
+                this.connectID = generateUuid();
+                this.chLable = "Ch_" + this.connectID + "_" + this.constTimestamp;
                 this.peer = null;
                 this.ch = null;
+                this.nodeID = nodeID;
                 this.onFinish_createOffer = null;
                 this.onFinish_setOfferGenAnswer = null;
                 this.onSetAnswer = null;
@@ -116,8 +127,13 @@
             }
             chOnOpen(event) {
                 Log.debug("DataChannel:onOpen" + this.ch);
-                var msg = "Hi " + this.selfID + " onOpen";
-                var dcMsg = new DataChannelMsg(this.selfID, null, msg, DataChannelMsgType.Broadcast);
+                if (this.isCreateOffer) {
+                    var msg = "Offer " + this.offerID + " onOpen";
+                    var dcMsg = new DataChannelMsg(this.offerID, this.answerID, msg, DataChannelMsgType.JoinNetwork, this.nodeID);
+                } else {
+                    var msg = "Offer " + this.answerID + " onOpen";
+                    var dcMsg = new DataChannelMsg(this.answerID, this.offerID, msg, DataChannelMsgType.JoinNetwork, this.nodeID);
+                }
                 this.ch.send(JSON.stringify(dcMsg));
             }
             chOnMessage(event) {
@@ -132,14 +148,14 @@
             }
             peelOnConnectionStateChange(evt) {
                 Log.debug("peelOnConnectionStateChange" + event.data);
-                this.onConnectionStateChange(this.peer, this.ch);
+                this.onConnectionStateChange(this);
             }
             createOffer(onFinish_createOffer) {
                 this.onFinish_createOffer = onFinish_createOffer;
                 this.peer = new RTCPeerConnection(this.rtcConfig);
                 this.peer.onconnectionstatechange = (evt) => { this.peelOnConnectionStateChange(evt); };
                 // this.peer = new RTCPeerConnection();
-                this.ch = this.peer.createDataChannel("CreateOffer-" + this.constTimestamp, this.dataChannelParams);
+                this.ch = this.peer.createDataChannel(this.chLable, this.dataChannelParams);
                 this.ch.onopen = (evt) => { this.chOnOpen(evt); };
                 // this.ch.addEventListener('open', () => {this.chOnOpen(evt);});
                 this.ch.onmessage = (evt) => { this.chOnMessage(evt); };
@@ -169,9 +185,10 @@
                     Log.error(reason);
                 });
             }
-            setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, opponentID, candidate) {
+            setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, offerID, candidate) {
                 this.onFinish_setOfferGenAnswer = onFinish_setOfferGenAnswer;
                 this.peer = new RTCPeerConnection(this.rtcConfig);
+                this.peer.onconnectionstatechange = (evt) => { this.peelOnConnectionStateChange(evt); };
                 // this.peer = new RTCPeerConnection();
                 this.peer.ondatachannel = (evt) => {
                     this.ch = event.channel;
@@ -180,6 +197,7 @@
                     this.ch.onmessage = (evt) => { this.chOnMessage(evt); }
                     this.ch.onclose = (evt) => { this.chOnClose(evt); };
                     this.ch.onerror = (evt) => { this.chOnError(evt); };
+                    this.onConnectionStateChange(this);
                 }
                 // this.peer.addEventListener('datachannel', (evt) => {this.peer.ondatachannel(evt)});
                 this.peer.onicecandidate = (evt) => {
@@ -194,7 +212,7 @@
                         this.onFinish_setOfferGenAnswer(this, this.peer.localDescription.toJSON());
                     }
                 }
-                this.opponentID = opponentID;
+                this.offerID = offerID;
                 this.peer.setRemoteDescription(sdp).then(() => {
                     return this.peer.createAnswer();
                 }).then((description) => {
@@ -211,8 +229,8 @@
                 });
 
             }
-            setAnswer(sdp, onSetAnswer, opponentID, candidate) {
-                this.opponentID = opponentID;
+            setAnswer(sdp, onSetAnswer, answerID, candidate) {
+                this.answerID = answerID;
                 this.onSetAnswer = onSetAnswer;
 
                 this.peer.setRemoteDescription(sdp).then(() => {
@@ -233,18 +251,87 @@
 
     </script>
     <script>
-        var ckPoolConnect = function () {
-            Log.debug("ckPoolConnect");
-            setTimeout(ckPoolConnect, 1000);
+        const limitLinkNum = 2;
+        var refreshLink = function () {
+            Log.debug("refreshLink");
+            //JSON.stringify(poolNetworkChannel, null, 2);
+            poolNetworkChannel = poolNetworkChannel.filter(ntCh =>
+                ntCh.offerCHs.length !== 0
+                || ntCh.answerCHs.length !== 0
+                || ntCh.nodeID === nodeID
+            );
+            var txt = "-----------------------<br>";
+            for (let i = 0; i < poolNetworkChannel.length; i++) {
+                const ntCh = poolNetworkChannel[i];
+                txt += "NodeID:" + ntCh.nodeID + "<br>";
+                txt += "OfferIDs:" + "<br>";
+                for (let i = 0; i < ntCh.offerCHs.length; i++) {
+                    const offerCH = ntCh.offerCHs[i];
+                    txt += "----" + offerCH + "<br>";
+                }
+                txt += "AnswerIDs:" + "<br>";
+                for (let i = 0; i < ntCh.answerCHs.length; i++) {
+                    const answerCH = ntCh.answerCHs[i];
+                    txt += "----" + answerCH + "<br>";
+                }
+                txt += "----<br>";
+            }
+            txt += "-----------------------<br>";
+            divLinke.innerHTML = txt;
         }
+        var ckPoolConnect = function () {
+            const beforeLenth = poolConnect.length;
+            poolConnect = poolConnect.filter(c =>
+                c.peer.connectionState !== "failed"
+                && c.peer.connectionState !== "closed"
+            );
+            const afterLenth = poolConnect.length;
+            if (afterLenth != beforeLenth) {
+                Log.debug("ckPoolConnect " + beforeLenth + "->" + afterLenth);
+            }
+
+            // setTimeout(ckPoolConnect, 5000);
+        }
+        // setTimeout(ckPoolConnect, 1000);
+
         var ckPoolReceiveMsg = function () {
             Log.debug("ckPoolReceiveMsg");
-            setTimeout(ckPoolConnect, 1000);
+            setTimeout(ckPoolReceiveMsg, 1000);
         }
-    </script>
-    <script>
+        var ckpoolNetworkChannel = function () {
+            Log.debug("ckPoolReceiveMsg");
+            setTimeout(ckpoolNetworkChannel, 10000);
+        }
+        class NetworkChannel {
+            constructor(nodeID, poolConnect) {
+                this.nodeID = nodeID;
+                this.refresh();
+            }
+            refresh() {
+                Log.debug("NetworkChannel refresh");
+                this.offerCHs = [];
+                this.answerCHs = [];
+                if (poolConnect) {
+                    poolConnect.forEach(Con => {
+                        if (Con.isCreateOffer) {
+                            this.offerCHs.push(Con.ch.label);
+                        } else if (Con.ch) {
+                            this.answerCHs.push(Con.ch.label);
+                        }
+                    });
+                }
+            }
+            static parseJSON(jNtCHannel) {
+                var ntch = new NetworkChannel()
+                ntch.nodeID = jNtCHannel.nodeID;;
+                ntch.offerCHs = jNtCHannel.offerCHs;
+                ntch.answerCHs = jNtCHannel.answerCHs;
+                return ntch;
+            }
+        }
         document.addEventListener('DOMContentLoaded', (event) => {
             Log.debug('DOM fully loaded and parsed');
+
             const inUserID = document.getElementById("inUserID");
             const inMsg = document.getElementById("inMsg");
 
@@ -260,12 +347,14 @@
             const divCreatePeer = document.getElementById("divCreatePeer");
             const divJoinPeer = document.getElementById("divJoinPeer");
             const divChat = document.getElementById("divChat");
+            const divLinke = document.getElementById("divLinke");
             const divLog = document.getElementById("divLog");
         });
 
-
+        const nodeID = generateUuid();
         var poolConnect = [];
         var poolReceiveMsg = [];
+        var poolNetworkChannel = [];
 
         function onCreateOffer() {
             var index = 0;
@@ -283,7 +372,7 @@
             if (hasConnecting) {
                 pc.createOffer(onFinish_createOffer);
             } else {
-                pc = new Connect(inUserID.value, true, onMessage, onConnectionStateChange);
+                pc = new Connect(inUserID.value, true, onMessage, onConnectionStateChange, nodeID, null);
                 poolConnect.push(pc);
                 pc.createOffer(onFinish_createOffer);
             }
@@ -318,7 +407,7 @@
                     const candy = jSdp.candidate[i];
                     candidate.push(new RTCIceCandidate(candy));
                 }
-                pc.setAnswer(sdp, null, jSdp.userID, candidate);
+                pc.setAnswer(sdp, null, jSdp.answerID, candidate);
             }
 
             txtSetAnswer.value = "";
@@ -351,11 +440,11 @@
                 candidate.push(new RTCIceCandidate(candy));
             }
             if (hasConnecting) {
-                pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.userID, candidate);
+                pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.offerID, candidate);
             } else {
-                pc = new Connect(inUserID.value, false, onMessage, onConnectionStateChange);
+                pc = new Connect(null, false, onMessage, onConnectionStateChange, nodeID, inUserID.value);
                 poolConnect.push(pc);
-                pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.userID, candidate);
+                pc.setOfferGenAnswer(sdp, onFinish_setOfferGenAnswer, jSdp.offerID, candidate);
             }
         }
 
@@ -369,7 +458,7 @@
         function onFinish_createOffer(connect, sdp) {
             // JSON.stringify(this.peer.localDescription.toJSON())
             var jSdp = connect.peer.localDescription.toJSON();
-            jSdp.userID = connect.selfID;
+            jSdp.offerID = connect.offerID;
             jSdp.candidate = connect.candidate;
             txtCreateOffer.value = JSON.stringify(jSdp);
             onOfferCopy();
@@ -378,7 +467,7 @@
 
         function onFinish_setOfferGenAnswer(connect, sdp) {
             var jSdp = connect.peer.localDescription.toJSON();
-            jSdp.userID = connect.selfID;
+            jSdp.answerID = connect.answerID;
             jSdp.candidate = connect.candidate;
             txtCreateAnswer.value = JSON.stringify(jSdp);
             onAnswertCopy();
@@ -391,24 +480,26 @@
                 jDCMsg = JSON.parse(evt.data);
                 var dcMsg = DataChannelMsg.parseJSON(jDCMsg);
                 dcMsg.channel = channel;
-                const mid = dcMsg.guid.substring(9, 13);
-                if (!dcMsg.guid) {
-                    Log.warn("No GUID MSG");
+                const mid = dcMsg.msgID.substring(9, 13);
+                if (!dcMsg.msgID) {
+                    Log.warn("No msgID MSG");
                     return;
                 }
                 var sameMsg = null;
                 for (let i = 0; i < poolReceiveMsg.length; i++) {
                     const rDCMsg = poolReceiveMsg[i];
-                    if (rDCMsg.guid === dcMsg.guid) {
+                    if (rDCMsg.msgID === dcMsg.msgID) {
                         sameMsg = rDCMsg;
                         break;
                     }
                 }
                 if (!sameMsg) {
                     poolReceiveMsg.push(dcMsg);
-                    var p = document.createElement("p")
-                    p.innerText = "(" + mid + ")" + dcMsg.from + "->" + dcMsg.to + ":" + dcMsg.body;
-                    divChat.append(p);
+                    if (dcMsg.type === DataChannelMsgType.JoinNetwork) {
+                        var p = document.createElement("p")
+                        p.innerText = "(" + mid + ")" + dcMsg.from + "->" + dcMsg.to + ":" + dcMsg.body;
+                        divChat.append(p);
+                    }
                 } else {
                     Log.debug("(" + mid + ")" + "hasSameMsg");
                 }
@@ -418,6 +509,33 @@
                 if (diffTime < limitTime && (!sameMsg || !sameMsg.developed)) {
                     dcMsg.developed = true;
                     developMsg(dcMsg)//他方轉傳
+                    if (dcMsg.type === DataChannelMsgType.LinkUpdate) {
+                        var netCH = NetworkChannel.parseJSON(JSON.parse(dcMsg.body));
+                        var hasCh = false;
+                        for (let i = 0; i < poolNetworkChannel.length; i++) {
+                            const ntCh = poolNetworkChannel[i];
+                            if (ntCh.nodeID === netCH.nodeID) {
+                                poolNetworkChannel[i] = netCH;
+                                hasCh = true;
+
+                                break;
+                            }
+                        }
+                        if (!hasCh) {
+                            poolNetworkChannel.push(netCH)
+                        }
+                        refreshLink();
+                    }
+                    if (dcMsg.type === DataChannelMsgType.JoinNetwork) {
+                        var selfNtChannel = getSelfNetworkChannel();
+                        if (!selfNtChannel) return;
+                        var linkMsg = JSON.stringify(selfNtChannel);
+                        var ntMsg = new DataChannelMsg(this.offerID, null, linkMsg, DataChannelMsgType.LinkUpdate, nodeID);
+                        // ntMsg.channel = channel;
+                        ntMsg.developed = true;
+                        poolReceiveMsg.push(ntMsg);
+                        developMsg(ntMsg)//他方轉傳
+                    }
                 } else {
                     Log.debug("(" + mid + ")" + "developed");
                 }
@@ -427,30 +545,99 @@
             }
         }
 
-        function onConnectionStateChange(peer, ch) {
-            Log.debug("onConnectionStateChange " + ch.label + ":" + peer.connectionState);
+        function getSelfNetworkChannel() {
+            var selfNtChannel = null;
+            for (let i = 0; i < poolNetworkChannel.length; i++) {
+                const nCon = poolNetworkChannel[i];
+                if (nCon.nodeID === nodeID) {
+                    selfNtChannel = nCon;
+                    selfNtChannel.refresh();
+                    break;
+                }
+            }
+            return selfNtChannel;
+        }
+
+        function onConnectionStateChange(connect) {
+            var userID = connect.isCreateOffer ? connect.offerID : connect.answserID;
+            if (connect.ch)
+                Log.debug("onConnectionStateChange " + connect.ch.label + ":" + connect.peer.connectionState);
+            else
+                Log.debug("onConnectionStateChange " + "Answering" + ":" + connect.peer.connectionState);
+            var needAddConnect = false;
+            if (connect.peer.connectionState === "connected") needAddConnect = true;
+            var hasAddConnect = false;
+            var hasOffline = false;
             poolConnect.forEach(c => {
-                if (c.peer.connectionState === "disconnected"
-                    || c.peer.connectionState === "failed"
+                if (c.peer.connectionState === "failed"
+                    // || c.peer.connectionState === "disconnected"
                     || c.peer.connectionState === "closed") {
+                    hasOffline = true;
                     Log.warn(c.ch.label + ":" + c.peer.connectionState);
                 }
+                if (needAddConnect && c.connectID === connect.connectID) {
+                    hasAddConnect = true;
+
+                }
             });
+            if (needAddConnect && !hasAddConnect) {
+                poolConnect.push(connect);
+            }
             poolConnect = poolConnect.filter(c =>
-                c.peer.connectionState !== "disconnected"
-                && c.peer.connectionState !== "failed"
+                c.peer.connectionState !== "failed"
                 && c.peer.connectionState !== "closed"
             );
+
+            var selfNtChannel = getSelfNetworkChannel();
+            if (!selfNtChannel) {
+                Log.debug("Push Self NetworkChannel")
+                selfNtChannel = new NetworkChannel(nodeID, poolConnect);
+                poolNetworkChannel.push(selfNtChannel);
+            } else if (hasOffline) {
+                var linkMsg = JSON.stringify(selfNtChannel);
+                var ntMsg = new DataChannelMsg(userID, null, linkMsg, DataChannelMsgType.LinkUpdate, nodeID);
+                ntMsg.developed = true;
+                poolReceiveMsg.push(ntMsg);
+                developMsg(ntMsg);//他方轉傳
+                var otherNtCHs = poolNetworkChannel.filter(ntCh => ntCh.nodeID !== nodeID);
+                for (let i = 0; i < otherNtCHs.length; i++) {
+                    const otherNtCH = otherNtCHs[i];
+                    // var otherNtCHhasOffline = false;
+                    // for (let j = 0; j < otherNtCH.offerCHs.length; j++) {
+                    //     const offerCH = otherNtCH.offerCHs[j];
+                    //     if (offerCH === otherNtCHhasOffline) otherNtCHhasOffline = true;
+                    //     break;
+                    // }
+                    // for (let j = 0; j < otherNtCH.answerCHs.length && !otherNtCHhasOffline; j++) {
+                    //     const answerCH = otherNtCH.answerCHs[j];
+                    //     if (answerCH === otherNtCHhasOffline) otherNtCHhasOffline = true;
+                    // }
+
+                    otherNtCH.offerCHs = otherNtCH.offerCHs.filter(ch => ch !== connect.ch.label);
+                    otherNtCH.answerCHs = otherNtCH.answerCHs.filter(ch => ch !== connect.ch.label);
+                    // if (otherNtCHhasOffline) {
+                        var linkMsg = JSON.stringify(otherNtCH);
+                        var ntMsg = new DataChannelMsg(userID, null, linkMsg, DataChannelMsgType.LinkUpdate, nodeID);
+                        ntMsg.developed = true;
+                        poolReceiveMsg.push(ntMsg);
+                        developMsg(ntMsg);//他方轉傳
+                    // }
+                }
+                // otherNtCH.forEach(ntCh => {
+                //     ntCh.offerCHs = ntCh.offerCHs.filter(ch => ch !== connect.ch.label);
+                //     ntCh.answerCHs = ntCh.answerCHs.filter(ch => ch !== connect.ch.label);
+                // });
+            }
+            refreshLink();
         }
 
         function onSendMsg() {
             const msg = inMsg.value;
-            const dcMsg = new DataChannelMsg(inUserID.value, null, msg, DataChannelMsgType.Broadcast);
+            const dcMsg = new DataChannelMsg(inUserID.value, null, msg, DataChannelMsgType.Broadcast, nodeID);
             developMsg(dcMsg);
         }
 
         function developMsg(dcMsg) {
-            // if (dcMsg.type === DataChannelMsgType.Opponent) {
             //     for (let i = 0; i < poolConnect.length; i++) {
             //         const connect = poolConnect[i];
             //         const channel = connect.ch;
@@ -465,6 +652,7 @@
                 const connect = poolConnect[i];
                 const channel = connect.ch;
                 if (channel.readyState === "open" && dcMsg.channel != channel) {
+                    Log.debug("developMsg Channel:" + channel.label);
                     channel.send(JSON.stringify(dcMsg));
                 } else {
                     Log.debug("Same Channel");
@@ -497,10 +685,6 @@
             btnJoinPeer.hidden = false;
             btnPeerCancel.hidden = true;
         }
-
-
-
-
     </script>
 </header>
 
@@ -531,8 +715,8 @@
     <input id="inMsg" type="text"><br>
     <button onClick="onSendMsg()">Send</button>
     <div id="divChat"></div><br>
-    <div id="divLog"></div><br>
     <div id="divLinke"></div><br>
+    <div id="divLog"></div><br>
 </body>
 
 </html>
