@@ -1,0 +1,693 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Dead",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "paths": {
+      "Hair": {
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "5add7c70-da12-4902-bd32-25de3831cd6f"
+                }
+              }
+            ]
+          }
+        },
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -1.142
+            },
+            {
+              "frame": 0.06666666666666667,
+              "value": -10.146799999999997
+            },
+            {
+              "frame": 0.25,
+              "value": -34.91
+            },
+            {
+              "frame": 0.5,
+              "value": -69.342
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 90.902
+            },
+            {
+              "frame": 0.06666666666666667,
+              "value": 91.4004
+            },
+            {
+              "frame": 0.25,
+              "value": 92.771
+            },
+            {
+              "frame": 0.5,
+              "value": 23.163
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 10
+            },
+            {
+              "frame": 0.5,
+              "value": 90
+            }
+          ]
+        }
+      },
+      "LeftHand": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 30.764
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 21.626
+            },
+            {
+              "frame": 0.25,
+              "value": 15.568
+            },
+            {
+              "frame": 0.5,
+              "value": -76.432
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 78.648
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 75.821
+            },
+            {
+              "frame": 0.25,
+              "value": 92.466
+            },
+            {
+              "frame": 0.5,
+              "value": 49.799
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 20
+            },
+            {
+              "frame": 0.5,
+              "value": 90
+            }
+          ]
+        }
+      },
+      "Body/Leg": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 3
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -37.608
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Body/Head/Eyes": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": false
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": true
+            }
+          ]
+        }
+      },
+      "Body": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -3
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": -3
+            },
+            {
+              "frame": 0.25,
+              "value": -5.736
+            },
+            {
+              "frame": 0.5,
+              "value": -37.735
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 37.608
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 37.608
+            },
+            {
+              "frame": 0.25,
+              "value": 53.126
+            },
+            {
+              "frame": 0.5,
+              "value": 22.459
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 10
+            },
+            {
+              "frame": 0.5,
+              "value": 90
+            }
+          ]
+        }
+      },
+      "Body/Coat": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -27.262
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 29.109
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Body/Head": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 0
+            },
+            {
+              "frame": 0.21666666666666667,
+              "value": 0
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 77.525
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 77.525
+            },
+            {
+              "frame": 0.21666666666666667,
+              "value": 77.525
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Body/RightHand": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 33.115
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 39.04
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Body/RightHand/ArmRight": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -51.823
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": -54.074
+            },
+            {
+              "frame": 0.25,
+              "value": -52.408
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -24.923
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": -26.344
+            },
+            {
+              "frame": 0.25,
+              "value": -10.416
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": -42.172
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": -133.712
+            },
+            {
+              "frame": 0.25,
+              "value": -65.866
+            }
+          ],
+          "active": [
+            {
+              "frame": 0,
+              "value": false
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": true
+            },
+            {
+              "frame": 0.5,
+              "value": false
+            }
+          ]
+        }
+      },
+      "Body/RightHand/ShoulderRight": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -62.667
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Body/RightHand/Weapon": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -29.299
+            },
+            {
+              "frame": 0.03333333333333333,
+              "value": -30.17
+            },
+            {
+              "frame": 0.06666666666666667,
+              "value": -45.66
+            },
+            {
+              "frame": 0.25,
+              "value": -123.018
+            },
+            {
+              "frame": 0.5,
+              "value": -38.305
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -27.13
+            },
+            {
+              "frame": 0.03333333333333333,
+              "value": -3.8
+            },
+            {
+              "frame": 0.06666666666666667,
+              "value": 2.419
+            },
+            {
+              "frame": 0.25,
+              "value": -10.405
+            },
+            {
+              "frame": 0.5,
+              "value": 107.674
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": -16.185
+            },
+            {
+              "frame": 0.25,
+              "value": 80
+            }
+          ]
+        }
+      },
+      "Body/RightHand/PalmRight": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -35.334
+            },
+            {
+              "frame": 0.03333333333333333,
+              "value": -34.309
+            },
+            {
+              "frame": 0.06666666666666667,
+              "value": -41.774
+            },
+            {
+              "frame": 0.08333333333333333,
+              "value": -49.268
+            },
+            {
+              "frame": 0.1,
+              "value": -56.763
+            },
+            {
+              "frame": 0.11666666666666667,
+              "value": -64.257
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": -86.741
+            },
+            {
+              "frame": 0.2,
+              "value": -92.56538461538463
+            },
+            {
+              "frame": 0.21666666666666667,
+              "value": -95.168
+            },
+            {
+              "frame": 0.25,
+              "value": -86.39
+            },
+            {
+              "frame": 0.5,
+              "value": -73.606
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -24.668
+            },
+            {
+              "frame": 0.03333333333333333,
+              "value": -7.435
+            },
+            {
+              "frame": 0.05,
+              "value": 0.5671250000000008
+            },
+            {
+              "frame": 0.06666666666666667,
+              "value": 4.331
+            },
+            {
+              "frame": 0.08333333333333333,
+              "value": 7.463
+            },
+            {
+              "frame": 0.1,
+              "value": 13.588
+            },
+            {
+              "frame": 0.11666666666666667,
+              "value": 15.951
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 0.582
+            },
+            {
+              "frame": 0.2,
+              "value": -14.09476923076923
+            },
+            {
+              "frame": 0.21666666666666667,
+              "value": -24.047
+            },
+            {
+              "frame": 0.25,
+              "value": -37.684
+            },
+            {
+              "frame": 0.5,
+              "value": -36.213
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Body/RightHand/HandRight": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -60.293
+            },
+            {
+              "frame": 0.25,
+              "value": -65.069
+            },
+            {
+              "frame": 0.5,
+              "value": -54.703
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -19.561
+            },
+            {
+              "frame": 0.25,
+              "value": -21.482
+            },
+            {
+              "frame": 0.5,
+              "value": -19.23
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 20
+            },
+            {
+              "frame": 0.25,
+              "value": 266.402
+            }
+          ]
+        }
+      },
+      "LeftHand/ShoulderLeft": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -6
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 9
+            }
+          ]
+        }
+      },
+      "LeftHand/PalmLeft": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 8.667
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -46.667
+            }
+          ],
+          "z": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "LeftHand/HandLeft": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 6.201
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -27.497
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": -28
+            }
+          ]
+        }
+      },
+      "LeftHand/ArmLeft": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -5.133
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -12.831
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}

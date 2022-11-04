@@ -1,0 +1,510 @@
+{
+  "ver": "1.0.14",
+  "uuid": "70d5e1e1-b9e4-431c-9519-b4f505264973",
+  "scaleFactor": 1,
+  "boneCount": 15,
+  "precomputeJointMatrix": false,
+  "animationFrameRate": 30,
+  "subMetas": {
+    "buffer.bin": {
+      "ver": "1.0.0",
+      "uuid": "f5601b46-f972-4d45-883c-c24ee8277e12",
+      "subMetas": {}
+    },
+    "body.mesh": {
+      "ver": "1.0.1",
+      "uuid": "b1aecbf3-bfdd-4762-8b95-7eff2d07189e",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00999999977648258,
+        "y": -0.00999999977648258,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 0.00999999977648258,
+        "y": 0.00999999977648258,
+        "z": 0
+      },
+      "subMetas": {}
+    },
+    "head.mesh": {
+      "ver": "1.0.1",
+      "uuid": "67048610-6249-457b-8e29-7980df7535c0",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00999999977648258,
+        "y": -0.00999999977648258,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 0.00999999977648258,
+        "y": 0.00999999977648258,
+        "z": 0
+      },
+      "subMetas": {}
+    },
+    "leg_stand.mesh": {
+      "ver": "1.0.1",
+      "uuid": "7d064782-63dc-40c1-8ee4-c801eb7693fa",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00393183063715696,
+        "y": -0.00393184646964073,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 0.00393183063715696,
+        "y": 0.00393184646964073,
+        "z": 0
+      },
+      "subMetas": {}
+    },
+    "lHand.mesh": {
+      "ver": "1.0.1",
+      "uuid": "5bde2e38-eb1d-4b1d-bf1d-ff9cb014462d",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00999999977648258,
+        "y": -0.00999999977648258,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 0.00999999977648258,
+        "y": 0.00999999977648258,
+        "z": 0
+      },
+      "subMetas": {}
+    },
+    "rHand.mesh": {
+      "ver": "1.0.1",
+      "uuid": "a23b08b6-35fd-4231-92f9-82036b877bbc",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00999999977648258,
+        "y": -0.00999999977648258,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 0.00999999977648258,
+        "y": 0.00999999977648258,
+        "z": 0
+      },
+      "subMetas": {}
+    },
+    "weapan.mesh": {
+      "ver": "1.0.1",
+      "uuid": "389b9de5-1959-4a03-99f4-a3c2f51a96b3",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00999999977648258,
+        "y": -0.00999999977648258,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 0.00999999977648258,
+        "y": 0.00999999977648258,
+        "z": 0
+      },
+      "subMetas": {}
+    },
+    "eyes.mesh": {
+      "ver": "1.0.1",
+      "uuid": "d9378676-ec5b-49e1-9825-cb6aeba678b8",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00999999977648258,
+        "y": -0.00999999977648258,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 0.00999999977648258,
+        "y": 0.00999999977648258,
+        "z": 0
+      },
+      "subMetas": {}
+    },
+    "legWalk5.mesh": {
+      "ver": "1.0.1",
+      "uuid": "956fc4ce-a173-46d6-89c0-c01d08562a04",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00999999977648258,
+        "y": -0.00999999977648258,
+        "z": 5.66289159661948e-12
+      },
+      "maxPos": {
+        "x": 0.00999999884516001,
+        "y": 0.00999999977648258,
+        "z": 5.66289159661948e-12
+      },
+      "subMetas": {}
+    },
+    "legWalk1.mesh": {
+      "ver": "1.0.1",
+      "uuid": "10f80861-a8ae-4055-b69d-6c850a38204b",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.00999999977648258,
+        "y": -0.00999999977648258,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 0.00999999884516001,
+        "y": 0.00999999977648258,
+        "z": 0
+      },
+      "subMetas": {}
+    },
+    "legWalk3.mesh": {
+      "ver": "1.0.1",
+      "uuid": "c59924c7-b9f2-4f0f-9090-e19a2e00946d",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.0108032058924437,
+        "y": -0.0097501128911972,
+        "z": 5.66289159661948e-12
+      },
+      "maxPos": {
+        "x": 0.00919679366052151,
+        "y": 0.010249886661768,
+        "z": 5.66289159661948e-12
+      },
+      "subMetas": {}
+    },
+    "legWalk0.mesh": {
+      "ver": "1.0.1",
+      "uuid": "d967d593-71b4-4ccd-8bf9-8480fc6e855e",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.0108032058924437,
+        "y": -0.0097501128911972,
+        "z": 5.66289159661948e-12
+      },
+      "maxPos": {
+        "x": 0.00919679366052151,
+        "y": 0.010249886661768,
+        "z": 5.66289159661948e-12
+      },
+      "subMetas": {}
+    },
+    "legWalk2.mesh": {
+      "ver": "1.0.1",
+      "uuid": "8deec6e3-fb49-4d1e-82d7-c7a76977f14a",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.0108032058924437,
+        "y": -0.0097501128911972,
+        "z": 5.66289159661948e-12
+      },
+      "maxPos": {
+        "x": 0.00919679366052151,
+        "y": 0.010249886661768,
+        "z": 5.66289159661948e-12
+      },
+      "subMetas": {}
+    },
+    "legWalk4.mesh": {
+      "ver": "1.0.1",
+      "uuid": "6d0ee67e-aa28-4bfb-9f2f-9894f45b3774",
+      "verts": 4,
+      "tris": 2,
+      "submeshes": 1,
+      "minPos": {
+        "x": -0.0108032058924437,
+        "y": -0.0097501128911972,
+        "z": 5.66289159661948e-12
+      },
+      "maxPos": {
+        "x": 0.00919679366052151,
+        "y": 0.010249886661768,
+        "z": 5.66289159661948e-12
+      },
+      "subMetas": {}
+    },
+    "ZhangJiao-0.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "b13e3512-d24e-42c6-9428-07276bf53b05",
+      "subMetas": {}
+    },
+    "ZhangJiao-1.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "91d97afd-797e-4360-a53d-c8e7b5e560cc",
+      "subMetas": {}
+    },
+    "ZhangJiao-2.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "ba1193f0-99b5-4370-93d5-4b9ef38cc188",
+      "subMetas": {}
+    },
+    "ZhangJiao-3.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "dc260ed6-64db-41d5-aadb-a709bcf32370",
+      "subMetas": {}
+    },
+    "ZhangJiao-4.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "ae7c5dce-764b-4c70-8389-2098eac4a72d",
+      "subMetas": {}
+    },
+    "ZhangJiao-5.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "14456c75-a047-4645-ab38-704728583f76",
+      "subMetas": {}
+    },
+    "ZhangJiao-6.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "1570a0d3-c18e-44be-b832-16470aa04651",
+      "subMetas": {}
+    },
+    "ZhangJiao-7.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "c9e39898-1828-4dd4-8f2e-5e6b4408ce76",
+      "subMetas": {}
+    },
+    "ZhangJiao-8.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "e0f42d37-4ea5-4507-8860-ddbfb3c6937e",
+      "subMetas": {}
+    },
+    "ZhangJiao-9.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "1d61240b-b706-44df-b672-3301ae7fb0fe",
+      "subMetas": {}
+    },
+    "ZhangJiao-10.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "4f44968c-bb78-491e-b06c-bbd038b91a23",
+      "subMetas": {}
+    },
+    "ZhangJiao-11.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "6d9f73bb-880c-4e9e-97bb-851b391540ee",
+      "subMetas": {}
+    },
+    "ZhangJiao-12.skeleton": {
+      "ver": "1.0.1",
+      "uuid": "4a369685-ed05-4f58-91aa-fadd96e53616",
+      "subMetas": {}
+    },
+    "Attack.sac": {
+      "ver": "1.0.1",
+      "uuid": "36c54d38-e908-4d52-9c82-5a78ed87d6f9",
+      "modelUuid": "70d5e1e1-b9e4-431c-9519-b4f505264973",
+      "animationID": 0,
+      "name": "Attack",
+      "maxFrameCount": 11,
+      "totalFrameCount": 31,
+      "duration": 0.4166666567325592,
+      "animationFrameRate": 30,
+      "subMetas": {}
+    },
+    "Stand.sac": {
+      "ver": "1.0.1",
+      "uuid": "744331f4-fcbb-4ac0-9ae2-088cc89e3a05",
+      "modelUuid": "70d5e1e1-b9e4-431c-9519-b4f505264973",
+      "animationID": 1,
+      "name": "Stand",
+      "maxFrameCount": 3,
+      "totalFrameCount": 11,
+      "duration": 0.4166666567325592,
+      "animationFrameRate": 30,
+      "subMetas": {}
+    },
+    "Walk.sac": {
+      "ver": "1.0.1",
+      "uuid": "bff5647b-d75e-466d-b13a-107b9e19b666",
+      "modelUuid": "70d5e1e1-b9e4-431c-9519-b4f505264973",
+      "animationID": 2,
+      "name": "Walk",
+      "maxFrameCount": 12,
+      "totalFrameCount": 79,
+      "duration": 0.8333333134651184,
+      "animationFrameRate": 30,
+      "subMetas": {}
+    },
+    "Armature|Attack.sac": {
+      "ver": "1.0.1",
+      "uuid": "710f4a3e-f540-47f9-b444-45beb1414442",
+      "modelUuid": "70d5e1e1-b9e4-431c-9519-b4f505264973",
+      "animationID": 3,
+      "name": "Armature|Attack",
+      "maxFrameCount": 11,
+      "totalFrameCount": 31,
+      "duration": 0.4166666567325592,
+      "animationFrameRate": 30,
+      "subMetas": {}
+    },
+    "Armature|Stand.sac": {
+      "ver": "1.0.1",
+      "uuid": "43f16b26-0f0b-44a7-a2c9-15291d68cfa5",
+      "modelUuid": "70d5e1e1-b9e4-431c-9519-b4f505264973",
+      "animationID": 4,
+      "name": "Armature|Stand",
+      "maxFrameCount": 3,
+      "totalFrameCount": 11,
+      "duration": 0.4166666567325592,
+      "animationFrameRate": 30,
+      "subMetas": {}
+    },
+    "Armature|Walk.sac": {
+      "ver": "1.0.1",
+      "uuid": "7e3eeafb-dee3-45a9-96c9-8ad3e69565a1",
+      "modelUuid": "70d5e1e1-b9e4-431c-9519-b4f505264973",
+      "animationID": 5,
+      "name": "Armature|Walk",
+      "maxFrameCount": 12,
+      "totalFrameCount": 79,
+      "duration": 0.8333333134651184,
+      "animationFrameRate": 30,
+      "subMetas": {}
+    },
+    "ZhangJiao.prefab": {
+      "ver": "1.2.5",
+      "uuid": "832c90f1-c70e-49e9-975b-0f7b2c0c1a75",
+      "optimizationPolicy": "AUTO",
+      "asyncLoadAssets": false,
+      "readonly": true,
+      "content": [
+        {
+          "__type__": "cc.Prefab",
+          "_name": "",
+          "_objFlags": 0,
+          "data": {
+            "__id__": 1
+          }
+        },
+        {
+          "__type__": "cc.Node",
+          "_name": "Sprite",
+          "_objFlags": 0,
+          "_opacity": 255,
+          "_color": {
+            "__type__": "cc.Color",
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 255
+          },
+          "_cascadeOpacityEnabled": true,
+          "_parent": null,
+          "_anchorPoint": {
+            "__type__": "cc.Vec2",
+            "x": 0.5,
+            "y": 0.5
+          },
+          "_contentSize": {
+            "__type__": "cc.Size",
+            "width": 40,
+            "height": 36
+          },
+          "_children": [],
+          "_skewX": 0,
+          "_skewY": 0,
+          "_localZOrder": 0,
+          "_globalZOrder": 0,
+          "_tag": -1,
+          "_opacityModifyRGB": false,
+          "_reorderChildDirty": false,
+          "_id": "",
+          "_active": true,
+          "_components": [
+            {
+              "__id__": 2
+            }
+          ],
+          "_prefab": {
+            "__id__": 3
+          },
+          "_eulerAngles": {
+            "__type__": "cc.Vec3",
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "_trs": {
+            "__type__": "TypedArray",
+            "ctor": "Float64Array",
+            "array": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "__type__": "cc.Sprite",
+          "_name": "",
+          "_objFlags": 0,
+          "node": {
+            "__id__": 1
+          },
+          "_enabled": true,
+          "_spriteFrame": {
+            "__uuid__": "8cdb44ac-a3f6-449f-b354-7cd48cf84061"
+          },
+          "_type": 0,
+          "_sizeMode": 1,
+          "_fillType": 0,
+          "_fillCenter": {
+            "__type__": "cc.Vec2",
+            "x": 0,
+            "y": 0
+          },
+          "_fillStart": 0,
+          "_fillRange": 0,
+          "_isTrimmedMode": true,
+          "_srcBlendFactor": 770,
+          "_dstBlendFactor": 771,
+          "_atlas": null
+        },
+        {
+          "__type__": "cc.PrefabInfo",
+          "root": {
+            "__id__": 1
+          },
+          "asset": null,
+          "fileId": "d7118yAG5lKybkFOAh8koPL"
+        }
+      ],
+      "subMetas": {}
+    },
+    "Material.000.mtl": {
+      "ver": "1.0.2",
+      "uuid": "2c75a07c-73c7-4fa3-a2b6-7ec7ba449b65",
+      "dataAsSubAsset": "{\n  \"__type__\": \"cc.Material\",\n  \"_name\": \"\",\n  \"_objFlags\": 0,\n  \"_native\": \"\",\n  \"_effectAsset\": {\n    \"__uuid__\": \"abc2cb62-7852-4525-a90d-d474487b88f2\"\n  },\n  \"_defines\": {\n    \"USE_DIFFUSE_TEXTURE\": true,\n    \"USE_ALPHA_TEST\": true\n  },\n  \"_props\": {\n    \"diffuseColor\": {\n      \"__type__\": \"cc.Color\",\n      \"r\": 204,\n      \"g\": 204,\n      \"b\": 204,\n      \"a\": 255\n    },\n    \"diffuseTexture\": {\n      \"__uuid__\": \"391894dd-2d70-4eb0-8bb5-2778d4f77ac0\"\n    }\n  }\n}",
+      "name": "Material.000.mtl",
+      "subMetas": {}
+    }
+  }
+}

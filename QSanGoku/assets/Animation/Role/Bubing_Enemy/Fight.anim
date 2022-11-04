@@ -1,0 +1,195 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Fight",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.25,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 22,
+  "curveData": {
+    "paths": {
+      "Leg": {
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "c192650f-5a33-44ea-9f06-78d2bbb47e09"
+                }
+              },
+              {
+                "frame": 0.16666666666666666,
+                "value": {
+                  "__uuid__": "d11042f8-6ed3-482e-bb4f-0a2f8fa69cc0"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "Body/HandRight": {
+        "props": {
+          "x": [],
+          "y": [],
+          "angle": [
+            {
+              "frame": 0,
+              "value": -162.294
+            },
+            {
+              "frame": 0.25,
+              "value": -316.26800000000003
+            }
+          ]
+        }
+      },
+      "Body/Weapon": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -29.566
+            },
+            {
+              "frame": 0.08333333333333333,
+              "value": -5.629
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 12.886
+            },
+            {
+              "frame": 0.25,
+              "value": 9.295
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 40.887
+            },
+            {
+              "frame": 0.08333333333333333,
+              "value": 43.725
+            },
+            {
+              "frame": 0.16666666666666666,
+              "value": 25.792
+            },
+            {
+              "frame": 0.25,
+              "value": 1.7439999999999998
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": -207.493
+            },
+            {
+              "frame": 0.08333333333333333,
+              "value": -238.392
+            },
+            {
+              "frame": 0.25,
+              "value": -345.19
+            }
+          ]
+        }
+      },
+      "HandLeft": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 11.31
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 59.15364000014961
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 10.161
+            },
+            {
+              "frame": 0.25,
+              "value": -17
+            }
+          ]
+        }
+      },
+      "Body": {
+        "props": {
+          "y": [
+            {
+              "frame": 0,
+              "value": 38
+            },
+            {
+              "frame": 0.25,
+              "value": 32
+            }
+          ],
+          "x": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Body/Head/Eyes": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": false
+            }
+          ]
+        }
+      },
+      "Body/Head": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -3.568
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 72.02
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 3
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": [
+    {
+      "frame": 0.25,
+      "func": "onFight_End",
+      "params": []
+    }
+  ]
+}

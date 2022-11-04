@@ -1,0 +1,80 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "aniWaitingStartGame",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8333333333333334,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "imgStartGame": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 255
+            },
+            {
+              "frame": 0.4166666666666667,
+              "value": 0
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": 255
+            }
+          ]
+        }
+      },
+      "ImgLeftTopLogo": {
+        "props": {
+          "y": [
+            {
+              "frame": 0,
+              "value": 216.929
+            },
+            {
+              "frame": 0.4166666666666667,
+              "value": 196.929
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": 216.929
+            }
+          ]
+        }
+      },
+      "ImgTwoPerson": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 190.317
+            },
+            {
+              "frame": 0.4166666666666667,
+              "value": 170.317
+            },
+            {
+              "frame": 0.8333333333333334,
+              "value": 190.317
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": [
+    {
+      "frame": 0.8333333333333334,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.8333333333333334,
+      "func": "",
+      "params": []
+    }
+  ]
+}

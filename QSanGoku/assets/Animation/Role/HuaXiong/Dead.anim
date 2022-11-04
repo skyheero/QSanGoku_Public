@@ -1,0 +1,443 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Dead",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "paths": {
+      "HourseBody": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        },
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "3c5add7f-f094-413b-9530-283deeec45c4"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "HourseBody/Leg": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -8.809
+            },
+            {
+              "frame": 0.25,
+              "value": -22.809
+            },
+            {
+              "frame": 0.26666666666666666,
+              "value": -1.476
+            },
+            {
+              "frame": 0.5,
+              "value": -86.809
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 45
+            },
+            {
+              "frame": 0.25,
+              "value": 67.667
+            },
+            {
+              "frame": 0.26666666666666666,
+              "value": 67
+            },
+            {
+              "frame": 0.5,
+              "value": 31
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 36
+            },
+            {
+              "frame": 0.26666666666666666,
+              "value": -60.608999999999995
+            },
+            {
+              "frame": 0.5,
+              "value": -0.617999999999995
+            }
+          ],
+          "anchorX": [
+            {
+              "frame": 0,
+              "value": 0.5
+            }
+          ],
+          "anchorY": [
+            {
+              "frame": 0,
+              "value": 0.8
+            }
+          ]
+        },
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "97622bcb-a006-46e7-901b-b8531c84c2dd"
+                }
+              },
+              {
+                "frame": 0.26666666666666666,
+                "value": {
+                  "__uuid__": "8cbfe4a5-fbde-4168-902f-b59cb1f76dc1"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "HourseBody/HandLeft": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 8
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 67
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "HourseBody/Body": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 1.7
+            },
+            {
+              "frame": 0.25,
+              "value": -24.3
+            },
+            {
+              "frame": 0.5,
+              "value": -122.967
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 58.713
+            },
+            {
+              "frame": 0.25,
+              "value": 90.713
+            },
+            {
+              "frame": 0.5,
+              "value": 22.713
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 19
+            },
+            {
+              "frame": 0.5,
+              "value": 88.861
+            }
+          ]
+        }
+      },
+      "HourseBody/Body/Head": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -9.043
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 25.044
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "HourseBody/Body/Head/Eyes": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": false
+            },
+            {
+              "frame": 0.26666666666666666,
+              "value": true
+            }
+          ]
+        }
+      },
+      "HourseBody/HourseHead": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 16.815
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 31.913
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 10
+            },
+            {
+              "frame": 0.5,
+              "value": -10
+            }
+          ]
+        },
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "e9c3afd7-a896-46ea-8997-b27f0e5c5b73"
+                }
+              },
+              {
+                "frame": 0.5,
+                "value": {
+                  "__uuid__": "89bb8891-4ce9-4bc8-8a4b-47e3988302b0"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "HourseBody/BodyFront": {
+        "props": {
+          "y": [
+            {
+              "frame": 0,
+              "value": 83.608
+            },
+            {
+              "frame": 0.25,
+              "value": 106.941
+            }
+          ],
+          "x": [
+            {
+              "frame": 0,
+              "value": -20.393
+            },
+            {
+              "frame": 0.25,
+              "value": -54.393
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 47.121
+            },
+            {
+              "frame": 0.5,
+              "value": 47.121
+            }
+          ]
+        }
+      },
+      "HourseBody/BodyFront/Weapon": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -26.969
+            },
+            {
+              "frame": 0.25,
+              "value": 108.388
+            },
+            {
+              "frame": 0.5,
+              "value": 85.288
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -34.732
+            },
+            {
+              "frame": 0.25,
+              "value": -99.182
+            },
+            {
+              "frame": 0.5,
+              "value": -238.901
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": -18.397
+            },
+            {
+              "frame": 0.25,
+              "value": -28.777
+            },
+            {
+              "frame": 0.5,
+              "value": -46.806
+            }
+          ]
+        }
+      },
+      "HourseBody/BodyFront/HandRight": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -4.871
+            },
+            {
+              "frame": 0.25,
+              "value": -3.692
+            },
+            {
+              "frame": 0.5,
+              "value": -139.162
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -2.733
+            },
+            {
+              "frame": 0.25,
+              "value": -3.003
+            },
+            {
+              "frame": 0.5,
+              "value": 0.843
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 19.733
+            },
+            {
+              "frame": 0.5,
+              "value": 42.607
+            }
+          ],
+          "anchorX": [
+            {
+              "frame": 0,
+              "value": 0.4
+            }
+          ],
+          "anchorY": [
+            {
+              "frame": 0,
+              "value": 0.85
+            }
+          ]
+        },
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "61c6f3b0-fd16-43b1-abbf-fffa45fcd5dd"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "events": []
+}

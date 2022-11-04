@@ -1,0 +1,280 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "Walk",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5166666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "Leg": {
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "515f3eca-416d-4b72-8171-790c67697ba4"
+                }
+              },
+              {
+                "frame": 0.1,
+                "value": {
+                  "__uuid__": "92867769-3d04-4016-9096-acef249545cf"
+                }
+              },
+              {
+                "frame": 0.2,
+                "value": {
+                  "__uuid__": "24db71b0-cc2d-41a4-9cf0-fd7cd297ff6f"
+                }
+              },
+              {
+                "frame": 0.3,
+                "value": {
+                  "__uuid__": "3bdcec7b-9ffb-495f-9c16-208d2c217426"
+                }
+              },
+              {
+                "frame": 0.4,
+                "value": {
+                  "__uuid__": "6d5eeb5e-9d8c-48aa-9222-fd061356381c"
+                }
+              },
+              {
+                "frame": 0.5
+              }
+            ]
+          }
+        }
+      },
+      "Body/Head/Eyes": {
+        "props": {
+          "active": [
+            {
+              "frame": 0,
+              "value": false
+            },
+            {
+              "frame": 0.2,
+              "value": true
+            },
+            {
+              "frame": 0.3,
+              "value": false
+            }
+          ]
+        }
+      },
+      "Body/HandRight": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -15.717
+            },
+            {
+              "frame": 0.5,
+              "value": -15.717
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 19.373
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": -44.585
+            },
+            {
+              "frame": 0.2,
+              "value": -10.624000000000002
+            },
+            {
+              "frame": 0.3,
+              "value": -17
+            },
+            {
+              "frame": 0.4,
+              "value": -35.84
+            },
+            {
+              "frame": 0.5,
+              "value": -44.585
+            }
+          ]
+        }
+      },
+      "Body/Weapon": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -32.065
+            },
+            {
+              "frame": 0.1,
+              "value": -23.595
+            },
+            {
+              "frame": 0.2,
+              "value": -14.454
+            },
+            {
+              "frame": 0.3,
+              "value": -18.290166666666664
+            },
+            {
+              "frame": 0.4,
+              "value": -27.911
+            },
+            {
+              "frame": 0.5,
+              "value": -32.065
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -7.925
+            },
+            {
+              "frame": 0.1,
+              "value": -11.055
+            },
+            {
+              "frame": 0.2,
+              "value": -11.528
+            },
+            {
+              "frame": 0.3,
+              "value": -12.201
+            },
+            {
+              "frame": 0.4,
+              "value": -10.003
+            },
+            {
+              "frame": 0.5,
+              "value": -7.925
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": -26.402
+            },
+            {
+              "frame": 0.2,
+              "value": 25.694
+            },
+            {
+              "frame": 0.3,
+              "value": 17.116
+            },
+            {
+              "frame": 0.4,
+              "value": -18.161
+            },
+            {
+              "frame": 0.5,
+              "value": -26.402
+            }
+          ]
+        }
+      },
+      "HandLeft": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 11.31
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 55.732
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 10.161
+            },
+            {
+              "frame": 0.2,
+              "value": -13.314000000000002
+            },
+            {
+              "frame": 0.5,
+              "value": 10
+            }
+          ]
+        }
+      },
+      "Body": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 37
+            },
+            {
+              "frame": 0.1,
+              "value": 38
+            },
+            {
+              "frame": 0.2,
+              "value": 37
+            },
+            {
+              "frame": 0.3,
+              "value": 38
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "Body/Head": {
+        "props": {
+          "x": [
+            {
+              "frame": 0,
+              "value": -3.568
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": 72.02
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 3
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}
